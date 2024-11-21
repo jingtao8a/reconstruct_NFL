@@ -49,7 +49,8 @@ T cut_key(T key, size_t len, bool verbose=false) {
 
 template<typename T, typename P>
 void format(std::string source_path, int num_keys = 0) {
-  std::string output_path = source_path.substr(0, source_path.length() - 5);
+  std::string output_path = source_path.substr(0, source_path.rfind('_')) + "_double.bin";
+
   std::ifstream in(source_path, std::ios::binary | std::ios::in);
   if (!in.is_open()) {
     std::cout << "File [" << source_path << "] does not exist" << std::endl;
