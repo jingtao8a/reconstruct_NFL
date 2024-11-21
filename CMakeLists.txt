@@ -29,7 +29,7 @@ include_directories(
 add_subdirectory(test)
 
 add_executable(format "${SRC_DIR}/util/format_data.cc")
-add_executable(gen "${SRC_DIR}/util/data_generator.cc")
+add_executable(data_gen "${SRC_DIR}/util/data_generator.cc")
 add_executable(nf_convert "${SRC_DIR}/util/nf_data_converter.cc")
 #add_executable(benchmark "${SRC_DIR}/benchmark.cc")
 
