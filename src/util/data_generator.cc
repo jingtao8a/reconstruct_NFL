@@ -1,4 +1,4 @@
-#include "benchmark/workload.h"
+#include "workload.h"
 #include "util/common.h"
 #include "util/zipf.h"
 

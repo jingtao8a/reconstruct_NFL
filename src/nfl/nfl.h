@@ -3,7 +3,7 @@
 
 #include "afli/afli.h"
 #include "afli/iterator.h"
-#include "benchmark/workload.h"
+#include "util/workload.h"
 #include "models/numerical_flow.h"
 #include "util/common.h"
 
