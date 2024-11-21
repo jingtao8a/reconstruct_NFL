@@ -22,8 +22,7 @@ set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(LIB_DIR "${PROJECT_SOURCE_DIR}/lib")
 
 include_directories(
-  ${SRC_DIR}
-  ${LIB_DIR}
+  ${SRC_DIR} ${LIB_DIR} competitor
 )
 
 add_subdirectory(test)
