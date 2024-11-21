@@ -9,7 +9,7 @@ index_name=nfl
 batch_size=256
 workload_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/workload/ycsb_200M_double_80R_zipf.bin
 config_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/configs/nfl.in
-show_incremental_updates=""
+show_incremental_updates=true
 
 echo "${exec} ${index_name} ${batch_size} ${workload_path} ${config_path} ${show_incremental_updates}"
 ${exec} ${index_name} ${batch_size} ${workload_path} ${config_path} ${show_incremental_updates}

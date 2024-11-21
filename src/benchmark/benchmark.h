@@ -79,8 +79,8 @@ typedef std::pair<KT, VT> KVT;
 
 public:
   
-  std::vector<KVT> init_data;
-  std::vector<Request<KT, VT>> requests;
+  std::vector<KVT> init_data;//bulk load data的数据
+  std::vector<Request<KT, VT>> requests;//Read Write Operation
   const double conflicts_decay = 0.1;
 
   void run_workload(std::string index_name, int batch_size, 
@@ -103,7 +103,7 @@ public:
       assert_p(init_data[i].first > init_data[i - 1].first, "Unordered case in load data");
     }
     // Start to evaluate
-    bool show_stat = false;
+    bool show_stat = true;
     ExperimentalResults exp_res(batch_size);
     if (start_with(index_name, "afli")) {
       run_afli(batch_size, exp_res, config_path, show_stat);
@@ -196,10 +196,10 @@ public:
     auto bulk_load_mid = std::chrono::high_resolution_clock::now();
     nfl.bulk_load(init_data.data(), init_data.size(), tail_conflicts);
     auto bulk_load_end = std::chrono::high_resolution_clock::now();
-    exp_res.bulk_load_trans_time = 
+    exp_res.bulk_load_trans_time = // init_data 转换时间
       std::chrono::duration_cast<std::chrono::nanoseconds>(bulk_load_mid 
                                                     - bulk_load_start).count();
-    exp_res.bulk_load_index_time = 
+    exp_res.bulk_load_index_time = // init_data 加载时间
       std::chrono::duration_cast<std::chrono::nanoseconds>(bulk_load_end 
                                                       - bulk_load_mid).count();
     if (show_stat) {
@@ -246,8 +246,8 @@ public:
                                                               - start).count();
       double time2 = std::chrono::duration_cast<std::chrono::nanoseconds>(end 
                                                               - mid).count();
-      exp_res.sum_transform_time += time1;
-      exp_res.sum_indexing_time += time2;
+      exp_res.sum_transform_time += time1;//read write 转换时间
+      exp_res.sum_indexing_time += time2;//read write 查找和插入时间
       exp_res.num_requests += batch_data.size();
       exp_res.latencies.push_back({time1, time2});
       exp_res.step();

@@ -213,70 +213,7 @@ struct TreeStat {
   }
 };
 
-struct RunStat {
-  // # num_data
-  uint32_t num_data_ = 0;
-  // # requests
-  uint32_t num_queries_ = 0;
-  uint32_t num_inserts_ = 0;
-  uint32_t num_updates_ = 0;
-  uint32_t num_query_depth_ = 0;
-  uint32_t num_query_model_ = 0;
-  uint32_t num_query_bucket_ = 0;
-  uint32_t num_query_dense_ = 0;
-  uint32_t num_update_model_ = 0;
-  uint32_t num_update_bucket_ = 0;
-  uint32_t num_update_dense_ = 0;
-  uint32_t num_insert_model_ = 0;
-  uint32_t num_insert_bucket_ = 0;
-  uint32_t num_insert_dense_ = 0;
-  uint32_t num_predictions_ = 0;
-  uint32_t num_comparisons_ = 0;
-  // # internal operations
-  uint32_t num_rebuilds_ = 0;
-  uint32_t num_data_rebuild_ = 0;
-  // Internal statistics
-  uint32_t bucket_threshold_ = 0;
-  // Space statistics
-  uint32_t allocated_size_ = 0;
-  // Deprecated
-  uint32_t num_cont_conflicts_ = 0;
-  uint32_t sum_cont_conflicts_ = 0;
-  uint32_t sum_len_cont_conflicts_ = 0;
-  uint32_t max_len_cont_conflicts_ = 0;
-
-  uint32_t num_requests() {
-    return num_queries_ + num_inserts_ + num_updates_;
-  }
-
-  void show() {
-    std::cout << std::string(10, '#') << "Running Statistics" 
-              << std::string(10, '#') << std::endl;
-    std::cout << "Maximum Bucket Size\t" << bucket_threshold_ << std::endl;
-    std::cout << "Number of Requests\t" << num_requests() << std::endl;
-    std::cout << "Number of Queries\t" << num_queries_ 
-              << "\tModel [" << num_query_model_ 
-              << "] Bucket [" << num_query_bucket_ 
-              << "] Dense [" << num_query_dense_ << "]\nAverage Depth\t" 
-              << num_query_depth_ * 1. / num_queries_ << std::endl;
-    std::cout << "Number of Updates\t" << num_updates_ 
-              << "\tModel [" << num_update_model_ 
-              << "] Bucket [" << num_update_bucket_ 
-              << "] Dense [" << num_update_dense_ << "]" << std::endl;
-    std::cout << "Number of Inserts\t" << num_inserts_ 
-              << "\tModel [" << num_insert_model_ 
-              << "] Bucket [" << num_insert_bucket_ 
-              << "] Dense [" << num_insert_dense_ << "]" << std::endl;
-    std::cout << "Number of Predictions\t" << num_predictions_ << std::endl;
-    std::cout << "Number of Comparisons\t" << num_comparisons_ << std::endl;
-    std::cout << "Number of Rebuilding Times\t" << num_rebuilds_ << std::endl;
-    std::cout << "Number of Data in Rebuilding\t" << num_data_rebuild_ 
-              << std::endl;
-    std::cout << std::string(38, '#') << std::endl;
-  }
-};
-
-struct ExperimentalResults {
+struct ExperimentalResults {//实验结果
   uint32_t batch_size;
   double bulk_load_trans_time = 0;
   double bulk_load_index_time = 0;
@@ -310,12 +247,13 @@ struct ExperimentalResults {
       sum_latency += latencies[i].first + latencies[i].second;
       num_ops += batch_size;
       if (need_compute[i] || i == latencies.size() - 1) {
-        std::cout << num_ops << "\t" << num_ops * 1e3 / sum_latency << std::endl;
+        std::cout << "cumulative ops: " << num_ops << "\t"
+        << "cumulative throughput: " << num_ops * 1e9 / sum_latency << " ops/sec " << std::endl;
       }
     }
   }
 
-  void show(bool pretty=false) {
+  void show(bool pretty=true) {
     if (num_requests == 0) {
       sum_indexing_time = 0;
     }
