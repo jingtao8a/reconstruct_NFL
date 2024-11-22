@@ -136,7 +136,7 @@ int main(int argc, char* argv[]) {
 
     std::string data_name = get_name(data_path);
     std::string workload_dir = data_path.substr(0, data_path.rfind("data/real")) + "workload";
-    std::string output_path = path_join(workload_dir, data_name + "_" + str<int>(read_frac * 100) + "R_" + dist_name + ".bin");
+    std::string output_path = path_join(workload_dir, data_name + "_" + str<int>(read_frac * 100) + "R_" + dist_name + "_" + std::to_string(batch_size) + ".bin");
     std::string source_path = data_path;
     generate_requests<double, long long>(output_path, source_path, dist_name, batch_size, init_frac, read_frac, kks_frac);
     return 0;
