@@ -5,9 +5,8 @@ root_dir=$(cd `dirname $0`/..; pwd)
 build_dir=${root_dir}/cmake-build-debug
 exec=${build_dir}/benchmark
 
-index_name=nfl
-batch_size=256
-workload_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/workload/ycsb_200M_double_80R_zipf.bin
+index_name=lipp
+workload_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/workload/fb_200M_double_80R_zipf_10000.bin
 config_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/configs/nfl.in
 show_incremental_updates=true
 
