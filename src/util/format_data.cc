@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
   std::string data_type = get_data_type(data_name);
   if (data_type == "uint64") {
     format<uint64_t, double>(data_path, num_keys);
-  } else if (data_type == "float64") {
+  } else if (data_type == "double") {
     format<double, double>(data_path, num_keys);
   } else if (data_type == "int64") {
     format<long long, double>(data_path, num_keys);
