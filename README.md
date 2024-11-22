@@ -42,10 +42,20 @@ workload_gen (data_path) (distribution name) (batch_size) (ratio of data for bul
 ```
 # Configurations for benchmark
 algorithms=('nfl' 'afli') // index name
-batch_size=256 // batch size
 workload_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/workload/ycsb_200M_double_80R_zipf.bin
 config_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/configs/nfl_ycsb_200M_double.in // config_path
 show_incremental_updates=any // show incremental updates
 
 benchmark (index name) (batch size) (workload path) [config path] [show incremental updates]
 ```
+# usage
+使用scripts目录下的脚本
+
+```
+bash scripts/[data_gen | format | workload_gen | benchmark].sh
+```
+
+- data_gen.sh: 生成合成数据集
+- format.sh: 将指定的真实数据集的数据类型转为double
+- workload_gen.sh: 生成工作负载
+- benchmark.sh: 测试
