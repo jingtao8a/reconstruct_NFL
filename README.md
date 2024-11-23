@@ -1,4 +1,4 @@
-## usage
+## Getting Started
 使用scripts目录下的脚本
 
 ```
@@ -10,6 +10,9 @@ bash scripts/[data_gen | format | workload_gen | benchmark].sh
 - workload_gen.sh: 生成工作负载
 - benchmark.sh: 测试
 - nf_convert.sh: 生成训练normalizing flow 所需的数据
+
+使用train目录下的脚本
+- train_flow.sh: 训练normalizing flow
 
 ## 可执行程序的参数选择
 ### format
