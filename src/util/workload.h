@@ -108,7 +108,7 @@ void write_requests(std::string path,
 }
 
 template<typename KT, typename VT>
-void assess_data(const std::pair<KT, VT>* kvs, uint32_t size, bool pretty=false) {
+void assess_data(const std::pair<KT, VT>* kvs, uint32_t size, bool pretty=true) {
   int num_unordered = 0;
   int num_duplicated = 0;
   for (int i = 1; i < size; ++ i) {
