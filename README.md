@@ -1,5 +1,18 @@
-# 可执行程序的参数选择
-## format
+## usage
+使用scripts目录下的脚本
+
+```
+bash scripts/[data_gen | format | workload_gen | benchmark].sh
+```
+
+- data_gen.sh: 生成合成数据集
+- format.sh: 将指定的真实数据集的数据类型转为double
+- workload_gen.sh: 生成工作负载
+- benchmark.sh: 测试
+- nf_convert.sh: 生成训练normalizing flow 所需的数据
+
+## 可执行程序的参数选择
+### format
 - 将 data/real 下的真实数据集 format 成 double类型, 可能需要进行截断和去重操作 
 - format 之前的数据集后缀为 .bin.data
 - format 之后的数据集后缀为 .bin
@@ -7,7 +20,7 @@
 ```
 format (data_path)
 ```
-## data_gen
+### data_gen
 - 生成合成数据集
 - 生成数据集的目录为 data/synthetic
 - 生成数据集的数据类型为 double
@@ -22,7 +35,7 @@ data_gen (data direcotry) lognormal (number millions of keys) (mean) (variance)
 data_gen (data directory) uniform (number millions of keys) (begin) (end)
 ```
 
-## workload_gen
+### workload_gen
 - 生成工作负载
 - 可以指定 bulk loading ratio、read/write ratio、know-key-space write ratio
 - 可以选择 read 操作时使用的分布（zip or uniform）, 以及批量操作 batch_size
@@ -37,7 +50,7 @@ kks_frac_list=(1) //known-key-space write ratio
 workload_gen (data_path) (distribution name) (batch_size) (ratio of data for bulk loading) (read ratio) (known-key-space write ratio)"
 ```
 
-## benchmark
+### benchmark
 - 测试基准
 ```
 # Configurations for benchmark
@@ -48,14 +61,8 @@ show_incremental_updates=any // show incremental updates
 
 benchmark (index name) (batch size) (workload path) [config path] [show incremental updates]
 ```
-# usage
-使用scripts目录下的脚本
-
+### nf_convert
+- 生成训练normalizing flow 所需的数据
 ```
-bash scripts/[data_gen | format | workload_gen | benchmark].sh
+nf_convert (workload path) (proportion of keys) (flow input director)
 ```
-
-- data_gen.sh: 生成合成数据集
-- format.sh: 将指定的真实数据集的数据类型转为double
-- workload_gen.sh: 生成工作负载
-- benchmark.sh: 测试
