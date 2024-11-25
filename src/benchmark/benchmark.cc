@@ -16,7 +16,8 @@ int main(int argc, char* argv[]) {
   std::string show_inc_thro = argc > 4 ? std::string(argv[4]) : "";
   std::string workload_name = get_workload_name(workload_path);
   auto index = workload_name.rfind("_");
-  int batch_size = std::stoi(workload_name.substr(index + 1, workload_name.length() - index - 1));
+  std::string batch_size_str = workload_name.substr(index + 1, workload_name.length() - index - 1);
+  int batch_size = std::stoi(batch_size_str);
   srand(kSEED);
   Benchmark<double, long long> benchmark;
   benchmark.run_workload(index_name, batch_size, workload_path, config_path, show_inc_thro != "");
