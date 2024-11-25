@@ -25,13 +25,8 @@ def plot_dist(keys: np.ndarray, path, fig_type, normalize=False):
       keys = (keys - np.min(keys)) / (np.max(keys) - np.min(keys))
     else:
       keys /= np.max(keys)
-  colors = ['red', 'blue', 'black']
-  fig = plt.figure()
   x = np.sort(keys, 0)
-  # sns.distplot(x, hist=False, kde=False, fit=stats.norm, 
-  #             fit_kws={'color': 'r', 'label':'u=0,s=1','linestyle':'-'})
   if fig_type == 'pdf':
-    # plt.hist(x, 100, density=True, facecolor='blue', alpha=0.75)
     sns.kdeplot(np.array(x))
   elif fig_type == 'cdf':
     y = np.arange(0, x.shape[0])
@@ -210,6 +205,7 @@ if __name__ == '__main__':
   print('Process: Evaluating original keys [{}]...'.format(load_keys.size()))
   evaluate_keys(load_keys.detach().cpu().numpy().squeeze(), log_f=log_f)
 
+  # Min-Max归一化操作目的是将 keys 全部转换为正数
   print('Process: Using Min-Max Normalization')
   global_mean = torch.min(load_keys)
   global_var = (torch.max(load_keys) - torch.min(load_keys)) / args.shifts

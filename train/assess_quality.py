@@ -102,21 +102,21 @@ def evaluate_keys(keys: np.ndarray, log_f=None, verbose=False):
 
     slope, intercept = build_linear_model(keys)
     conf_stat = compute_conflicts(keys, slope, intercept, amp=-1, log_f=log_f, verbose=verbose)
-    print('Absolute Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]))
+    print('Absolute Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}\n'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]))
     if log_f != None:
-      print('Absolute Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]), file=log_f)
+      print('Absolute Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}\n'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]), file=log_f)
 
     slope, intercept = build_linear_model(keys)
     conf_stat = compute_conflicts(keys, slope, intercept, amp=1.5, log_f=log_f, verbose=verbose)
-    print('Limited Space Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]))
+    print('Limited Space Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}\n'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]))
     if log_f != None:
-      print('Limited Space Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]), file=log_f)
+      print('Limited Space Conflicts\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}\n'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]), file=log_f)
 
     slope, intercept = build_linear_model(keys, 'prop')
     conf_stat = compute_conflicts(keys, slope, intercept, amp=1.5, log_f=log_f, verbose=verbose)
-    print('Proportional Building\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]))
+    print('Proportional Building\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}\n'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]))
     if log_f != None:
-      print('Proportional Building\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]), file=log_f)
+      print('Proportional Building\nTotal conflicts {}, max conflict {}, 99% conflict {}, average conflict {}\n'.format(conf_stat[0], conf_stat[1], conf_stat[2], conf_stat[3]), file=log_f)
   else:
     print('All keys are the same')
     if log_f != None:
