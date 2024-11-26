@@ -15,6 +15,7 @@ from tqdm import trange
 from data_util import *
 from distribution_transformer import *
 from assess_quality import *
+from mean_var import MeanVar
 
 torch.set_default_dtype(torch.float64)
 torch.set_printoptions(precision=10, sci_mode=False)
@@ -36,7 +37,7 @@ def plot_dist(keys: np.ndarray, path, fig_type, normalize=False):
   plt.savefig(path + '_' + fig_type + '.png')
   plt.close()
 
-def train(train_keys, model, optimizer, scheduler, best_loss, args, model_path):
+def train(train_keys, model, optimizer, scheduler, best_loss, args, model_path, mean_var):
   model.train()
   model = model.to(args.device)
   last_loss = None
@@ -81,7 +82,7 @@ def train(train_keys, model, optimizer, scheduler, best_loss, args, model_path):
       break
     if epoch_loss < best_loss:
       best_loss = epoch_loss
-      save(model, optimizer, model_path)
+      save(model, optimizer, mean_var, model_path)
     last_loss = epoch_loss
 
   return best_loss
@@ -105,15 +106,17 @@ def test(source_keys, model, args):
       tran_keys = torch.cat((tran_keys, z), 0) if tran_keys != None else z
   return tran_keys
 
-def load(model, optimizer, path):
+def load(model, optimizer, mean_var, path):
   checkpoint = torch.load(path)
   model.load_state_dict(checkpoint["model"])
   optimizer.load_state_dict(checkpoint["optimizer"])
+  mean_var.load_state_dict(checkpoint["mean_var"])
 
-def save(model, optimizer, path):
+def save(model, optimizer, mean_var, path):
   d = {}
   d["model"] = model.state_dict()
   d["optimizer"] = optimizer.state_dict()
+  d["mean_var"] = mean_var.state_dict()
   torch.save(d, path)
 
 def save_weights(model, mean, var, args, weight_path):
@@ -128,8 +131,8 @@ if __name__ == '__main__':
   # Initializing parameters for flow models
   parser = argparse.ArgumentParser()
   parser.add_argument('--device', type=str, default='cuda:0')
-  parser.add_argument('--data_dir', type=str, default='data')
-  parser.add_argument('--data_name', type=str, default='lognormal-200M-100R-zipf')
+  parser.add_argument('--data_dir', type=str, default='')
+  parser.add_argument('--data_name', type=str, default='')
   parser.add_argument('--seed', type=int, default=1000000007)
   parser.add_argument('--plot', type=bool, default=True)
   parser.add_argument('--log_file', type=bool, default=True)
@@ -213,6 +216,9 @@ if __name__ == '__main__':
   print('Min {} Max {}'.format(torch.min(load_keys), torch.max(load_keys)))
   if args.log_file:
     print('Min {} Max {}'.format(torch.min(load_keys), torch.max(load_keys)), file=log_f)
+  mean_var = MeanVar()
+  mean_var.mean = global_mean
+  mean_var.var = global_var
 
   encoder_config = {}
   decoder_config = {}
@@ -262,7 +268,7 @@ if __name__ == '__main__':
 
   if args.load != None:
     load_path = os.path.join(args.load, 'checkpoint.pt')
-    load(model, optimizer, load_path)
+    load(model, optimizer, mean_var, load_path)
   else:
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 
                   factor=args.decay, patience=args.patience, min_lr=5e-4, 
@@ -273,17 +279,18 @@ if __name__ == '__main__':
 
       print('Process: {} Training...'.format(i + 1))
       start_time = time.time()
-      best_loss = train(train_keys, model, optimizer, scheduler, best_loss, args, model_path)
+      best_loss = train(train_keys, model, optimizer, scheduler, best_loss, args, model_path, mean_var)
       train_durations = time.time() - start_time
       print('Time Cost of Training {}'.format(train_durations))
       if args.log_file:
         print('Time Cost of Training {}'.format(train_durations), file=log_f)
-      load(model, optimizer, model_path)
+      load(model, optimizer, mean_var, model_path)
  
   print('Process: Saving weights for c++ inference...')
   weight_path = os.path.join(checkpoint_dir, args.data_name + '-weights.txt')
   save_weights(model, global_mean, global_var, args, weight_path)
-  
+  assert(mean_var.mean == global_mean)
+  assert(mean_var.var == global_var)
   print('Process: Transforming keys...')
   tran_keys = test(load_keys, model, args)
   
