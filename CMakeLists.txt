@@ -16,15 +16,10 @@ else ()
   set(CMAKE_CXX_FLAGS "-O3 -march=native -ggdb3 -pthread")
 endif ()
 
-list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/lib/libmkl")
-
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(LIB_DIR "${PROJECT_SOURCE_DIR}/lib")
 
-include_directories(
-  ${SRC_DIR} ${LIB_DIR} competitor
-)
-
+include_directories(${SRC_DIR} ${LIB_DIR} competitor)
 add_subdirectory(test)
 
 add_executable(format "${SRC_DIR}/util/format_data.cc")
@@ -33,6 +28,19 @@ add_executable(workload_gen "${SRC_DIR}/util/workload_generator.cc")
 add_executable(nf_convert "${SRC_DIR}/util/nf_data_converter.cc")
 add_executable(benchmark "${SRC_DIR}/benchmark/benchmark.cc")
 
+set(CMAKE_CUDA_COMPILER /usr/local/cuda/bin/nvcc)
+set(Torch_DIR /home/chengang/anaconda3/envs/jingtao8a_env/lib/python3.8/site-packages/torch/share/cmake/Torch)
+find_package(PythonInterp REQUIRED)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development NumPy)
+find_package(Torch REQUIRED)
+if (TORCH_FOUND)
+  include_directories(${TORCH_INCLUDE_DIRS})
+  target_link_libraries(benchmark ${TORCH_LIBRARIES} Python3::Python Python3::NumPy)
+elseif ()
+  message(WARNING "torch libs not found")
+endif()
+
+list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/lib/libmkl")
 find_package(MKL)
 if (MKL_FOUND)
   include_directories(${MKL_INCLUDE_DIR})
@@ -48,3 +56,7 @@ if (OPENMP_FOUND)
 else ()
   message(WARNING "OpenMP libs not found")
 endif ()
+
+
+
+
