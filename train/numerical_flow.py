@@ -118,6 +118,10 @@ def save(model, optimizer, mean_var, path):
   d["optimizer"] = optimizer.state_dict()
   d["mean_var"] = mean_var.state_dict()
   torch.save(d, path)
+  model_path = path.replace("checkpoint.pt", "model.pt")
+  torch.save(model, model_path)
+  mean_var_path = path.replace("checkpoint.pt", "mean_var.pt")
+  torch.save(mean_var, mean_var_path)
 
 def save_weights(model, mean, var, args, weight_path):
   f = open(weight_path, 'w')
