@@ -122,6 +122,13 @@ def save(model, optimizer, mean_var, path):
   torch.save(model.state_dict(), model_path)
   mean_var_path = path.replace("checkpoint.pt", "mean_var.pt")
   torch.save(mean_var.state_dict(), mean_var_path)
+  entire_model_path = path.replace("checkpoint.pt", "entire_model.pt")
+  torch.save(model, entire_model_path)
+
+  script_model_path = path.replace("checkpoint.pt", "script_model.pt")
+  example = torch.rand(1, 1).to("cuda:0")
+  traced_script_module = torch.jit.trace(model, example)
+  traced_script_module.save(script_model_path)
 
 def save_weights(model, mean, var, args, weight_path):
   f = open(weight_path, 'w')
