@@ -18,7 +18,7 @@ hidden_dim=1
 data_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/data
 data_name=longlat_200M_double_80R_zipf_10000-small
 output_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/testdir
-load_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint/longlat_200M_double_80R_zipf_10000-small-2024-11-26-09-58-02
+load_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint/longlat_200M_double_80R_zipf_10000-small-2024-11-27-11-33-50/
 
 python_file_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/test.py
 
