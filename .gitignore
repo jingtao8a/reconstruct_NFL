@@ -4,5 +4,5 @@ data
 workload
 checkpoint
 testdir
-nfl_parameter
+torch_model_weights
 Linear
