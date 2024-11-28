@@ -6,7 +6,7 @@
 #include <iostream>
 #include <numeric>
 #include "afli/conflicts.h"
-
+#include "torch_models/numerical_flow.h"
 using namespace std;
 
 void readTxtData(std::string file_path, std::vector<double>& data_vector) {
@@ -120,7 +120,15 @@ void test1() {
     evaluate_keys(tranData);
 }
 
+void testNumericalFlow() {
+    std::string model_dir("/home/chengang/chengang/jingtao8a/reconstruct_NFL/torch_model_weights/longlat_200M_double_zipf_10000_small");
+    auto nflExp = nfl::NumericalFlow<double, uint64_t>(model_dir, 10000);
+    std::pair<double, uint64_t> kv;
+    kv.first = -20240.0;
+    auto t_kv = nflExp.transform(kv);
+    std::cout << t_kv.first << std::endl;
+}
 int main() {
-    test1();
+    testNumericalFlow();
     return 0;
 }
