@@ -90,19 +90,19 @@ void evaluate_keys(std::vector<double>& data) {
 }
 
 void test1() {
-    std::string path = "/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint/longlat_200M_double_80R_zipf_10000-small-2024-11-28-10-10-45/";
-    std::string script_model_path = path + "script_model.pt";
+    std::string path = "/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint/longlat_200M_double_80R_zipf_10000-2024-11-28-11-52-10";
+    std::string script_model_path = path + "/script_model.pt";
     torch::Device device(torch::kCUDA, 0);
     torch::jit::script::Module model = torch::jit::load(script_model_path);
     model.to(device);
     model.eval();
 
-    std::string file_path = "/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/data/longlat_200M_double_80R_zipf_10000-small-training.txt";
+    std::string file_path = "/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/data/longlat_200M_double_80R_zipf_10000-training.txt";
     std::vector<double> data;
     readTxtData(file_path, data);
     evaluate_keys(data);
     double mean = -32419.0015482999988308;
-    double var = 0.0101412717253000;
+    double var = 0.0648905358907000;
 
     int n = data.size();
     for (int i = 0; i < n; ++i) {
@@ -121,13 +121,14 @@ void test1() {
 }
 
 void testNumericalFlow() {
-    std::string model_dir("/home/chengang/chengang/jingtao8a/reconstruct_NFL/torch_model_weights/longlat_200M_double_zipf_10000_small");
+    std::string model_dir("/home/chengang/chengang/jingtao8a/reconstruct_NFL/torch_model_weights/longlat_200M_double_zipf_10000");
     auto nflExp = nfl::NumericalFlow<double, uint64_t>(model_dir, 10000);
     std::pair<double, uint64_t> kv;
-    kv.first = -20240.0;
+    kv.first = 20240.0;
     auto t_kv = nflExp.transform(kv);
     std::cout << t_kv.first << std::endl;
 }
+
 int main() {
     testNumericalFlow();
     return 0;
