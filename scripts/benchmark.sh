@@ -10,5 +10,5 @@ workload_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/workload/longlat
 config_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/configs/nfl.in
 show_incremental_updates=true
 
-echo "${exec} ${index_name} ${batch_size} ${workload_path} ${config_path} ${show_incremental_updates}"
-${exec} ${index_name} ${batch_size} ${workload_path} ${config_path} ${show_incremental_updates}
+echo "${exec} ${index_name} ${workload_path} ${config_path} ${show_incremental_updates}"
+${exec} ${index_name} ${workload_path} ${config_path} ${show_incremental_updates}
