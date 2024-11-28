@@ -120,7 +120,7 @@ class DistTransformer(torch.nn.Module):
         )
         if f < num_flows - 1:
             flows.append(Permutation(input_dim, 'flip'))
-    return flows[0]
+    return BNAFSequential(*flows)
 
   def loss(self, x: torch.Tensor):
     assert self.training

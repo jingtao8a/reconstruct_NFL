@@ -33,7 +33,7 @@ def test3(path):
     print(model.state_dict())
 
 def main():
-    path = "/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint/longlat_200M_double_80R_zipf_10000-small-2024-11-27-15-29-23/checkpoint.pt"
+    path = "/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint/longlat_200M_double_80R_zipf_10000-small-2024-11-28-10-10-45/checkpoint.pt"
     test1(path)
     test2(path)
     test3(path)
