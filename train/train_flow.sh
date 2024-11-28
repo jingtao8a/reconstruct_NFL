@@ -31,7 +31,7 @@ batch_dim=4096
 loss_func='normal'
 output_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint
 
-data_name=longlat_200M_double_80R_zipf_10000-small
+data_name=longlat_200M_double_80R_zipf_10000
 data_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/data
 
 python_file_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/numerical_flow.py
