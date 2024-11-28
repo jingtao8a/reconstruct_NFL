@@ -62,10 +62,10 @@ workload_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/workload/ycsb_20
 config_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/configs/nfl_ycsb_200M_double.in // config_path
 show_incremental_updates=any // show incremental updates
 
-benchmark (index name) (batch size) (workload path) [config path] [show incremental updates]
+benchmark (index name) (workload path) [config path] [show incremental updates]
 ```
 ### nf_convert
 - 生成训练normalizing flow 所需的数据
 ```
-nf_convert (workload path) (proportion of keys) (flow input director)
+nf_convert (workload path) (proportion of keys) (flow input directory)
 ```
