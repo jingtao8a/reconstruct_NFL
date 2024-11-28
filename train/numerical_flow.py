@@ -127,8 +127,10 @@ def save(model, optimizer, mean_var, path):
 
   script_model_path = path.replace("checkpoint.pt", "script_model.pt")
   example = torch.rand(1, 1).to("cuda:0")
+  model.eval()
   traced_script_module = torch.jit.trace(model, example)
   traced_script_module.save(script_model_path)
+  model.train()
 
 def save_weights(model, mean, var, args, weight_path):
   f = open(weight_path, 'w')
