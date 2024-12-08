@@ -305,8 +305,13 @@ if __name__ == '__main__':
   assert(mean_var.mean == global_mean)
   assert(mean_var.var == global_var)
   print('Process: Transforming keys...')
+  start_time = time.time()
   tran_keys = test(load_keys, model, args)
-  
+  transfer_time = time.time() - start_time
+  print('Time cost of Transforming keys {}'.format(transfer_time))
+  if args.log_file:
+    print('Time cost of Transforming keys {}'.format(transfer_time), file=log_f)
+
   num_unordered = ((tran_keys[1:] - tran_keys[:-1]) < 0).sum().item()
   if num_unordered > 0:
     print('Process: Sorting keys...')
