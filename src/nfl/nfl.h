@@ -4,7 +4,8 @@
 #include "afli/afli.h"
 #include "afli/iterator.h"
 #include "util/workload.h"
-#include "torch_models/numerical_flow.h"
+//#include "torch_models/numerical_flow.h"
+#include "models/numerical_flow.h"
 #include "util/common.h"
 
 namespace nfl {
