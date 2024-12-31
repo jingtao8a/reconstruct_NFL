@@ -38,15 +38,19 @@ if (TORCH_FOUND)
   include_directories(${TORCH_INCLUDE_DIRS})
   target_link_libraries(benchmark ${TORCH_LIBRARIES} Python3::Python Python3::NumPy)
   target_link_libraries(torch_modules_test ${TORCH_LIBRARIES})
+  message("TORCH_INCLUDE_DIRS " ${TORCH_INCLUDE_DIRS})
+  message("TORCH_LIBRARIES " ${TORCH_LIBRARIES})
 elseif ()
   message(WARNING "torch libs not found")
 endif()
 
 list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/lib/libmkl")
-find_package(MKL)
+find_package(MKL REQUIRED)
 if (MKL_FOUND)
   include_directories(${MKL_INCLUDE_DIR})
   target_link_libraries(benchmark ${MKL_LIBRARIES})
+  message("MKL_INCLUDE_DIR " ${MKL_INCLUDE_DIR})
+  message("MKL_LIBRARIES " ${MKL_LIBRARIES})
 else ()
   message(WARNING "MKL libs not found")
 endif ()
@@ -58,7 +62,3 @@ if (OPENMP_FOUND)
 else ()
   message(WARNING "OpenMP libs not found")
 endif ()
-
-
-
-
