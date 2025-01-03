@@ -124,6 +124,7 @@ public:
               << std::endl;
     if (show_incremental_throughputs) {
       exp_res.show_incremental_throughputs();
+      exp_res.show();
     } else {
       exp_res.show();
     }
