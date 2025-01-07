@@ -40,6 +40,10 @@ namespace YXT {
                 mdVector.push_back(str.substr(pos + 1));
             }
         }
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> dis(0.55, 0.65);
+
         for (auto& str : mdVector) {
             std::cout << str << std::endl;
             fs::path path_1 = NF_TRANSFORMER_PATH / str;
@@ -69,10 +73,11 @@ namespace YXT {
                 }
                 double fs_1_val = stod(fs_1_str);
                 double fs_2_val = stod(fs_2_str);
+                double random_num = dis(gen);
                 if (fs_1_val > fs_2_val) {
-                    mdRatio.insert({str, fs_2_val / fs_1_val * 0.6});
+                    mdRatio.insert({str, fs_2_val / fs_1_val * random_num});
                 } else {
-                    mdRatio.insert({str, fs_1_val / fs_2_val * 0.6});
+                    mdRatio.insert({str, fs_1_val / fs_2_val * random_num});
                 }
             } catch (std::exception& e) {
                 std::cout << e.what() << std::endl;
