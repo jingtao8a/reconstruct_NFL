@@ -70,9 +70,9 @@ namespace YXT {
                 double fs_1_val = stod(fs_1_str);
                 double fs_2_val = stod(fs_2_str);
                 if (fs_1_val > fs_2_val) {
-                    mdRatio.insert({str, fs_2_val / fs_1_val * 0.8});
+                    mdRatio.insert({str, fs_2_val / fs_1_val * 0.6});
                 } else {
-                    mdRatio.insert({str, fs_1_val / fs_2_val * 0.8});
+                    mdRatio.insert({str, fs_1_val / fs_2_val * 0.6});
                 }
             } catch (std::exception& e) {
                 std::cout << e.what() << std::endl;
