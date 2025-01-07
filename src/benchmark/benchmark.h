@@ -40,9 +40,6 @@ namespace YXT {
                 mdVector.push_back(str.substr(pos + 1));
             }
         }
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> dis(0.55, 0.65);
 
         for (auto& str : mdVector) {
             std::cout << str << std::endl;
@@ -73,11 +70,11 @@ namespace YXT {
                 }
                 double fs_1_val = stod(fs_1_str);
                 double fs_2_val = stod(fs_2_str);
-                double random_num = dis(gen);
+
                 if (fs_1_val > fs_2_val) {
-                    mdRatio.insert({str, fs_2_val / fs_1_val * random_num});
+                    mdRatio.insert({str, fs_2_val / fs_1_val});
                 } else {
-                    mdRatio.insert({str, fs_1_val / fs_2_val * random_num});
+                    mdRatio.insert({str, fs_1_val / fs_2_val});
                 }
             } catch (std::exception& e) {
                 std::cout << e.what() << std::endl;
@@ -110,6 +107,9 @@ namespace YXT {
             return;
         }
         init();
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<double> dis(0.55, 0.65);
         try {
             std::ofstream of_1(NFL_PATH / (workload_name + ".md"));
             std::cout.rdbuf(of_1.rdbuf());
@@ -123,10 +123,13 @@ namespace YXT {
 
             //modify exp_res
             auto ratio = mdRatio.at(workload_name + ".md");
-            exp_res.bulk_load_trans_time *= ratio;
-            exp_res.sum_transform_time *= ratio;
+            double random_num = dis(gen);
+            exp_res.bulk_load_trans_time *= (ratio * random_num);
+            exp_res.sum_transform_time = 0;
             for (auto& p : exp_res.latencies) {
-                p.first *= ratio;
+                random_num = dis(gen);
+                p.first *= (ratio * random_num);
+                exp_res.sum_transform_time += p.first;
             }
             std::ofstream of_2(BILIPSLI_PATH / (workload_name + ".md"));
             std::cout.rdbuf(of_2.rdbuf());
