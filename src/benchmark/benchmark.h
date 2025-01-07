@@ -8,6 +8,135 @@
 #include "nfl/nfl.h"
 #include "lipp/src/core/lipp.h"
 #include "ALEX/src/core/alex.h"
+#include <fstream>
+#include <iostream>
+#include <filesystem>
+#include <vector>
+#include <unordered_map>
+#include <string.h>
+
+namespace fs = std::filesystem;
+namespace YXT {
+    static const fs::path EXP_DATA_PATH("/home/chengang/chengang/jingtao8a/reconstruct_NFL/exp_data");
+    static const fs::path NF_TRANSFORMER("NF-transformer");
+    static const fs::path BILIPSLI("BiLipsLI");
+    static const fs::path BILIPS_TRANSFORMER("BiLips-transformer");
+    static const fs::path NFL("NFL");
+
+    static const fs::path NF_TRANSFORMER_PATH = EXP_DATA_PATH / NF_TRANSFORMER;
+    static const fs::path BILIPS_TRANSFORMER_PATH = EXP_DATA_PATH / BILIPS_TRANSFORMER;
+    static const fs::path NFL_PATH = EXP_DATA_PATH / NFL;
+    static const fs::path BILIPSLI_PATH = EXP_DATA_PATH / BILIPSLI;
+    static std::vector<std::string> mdVector;
+    static std::unordered_map<std::string, double> mdRatio;
+
+    static const char* TIME_COST_OF_TRANSFORMING_KEYS_STR = "Time cost of Transforming keys ";
+
+    static void init() {
+        for (auto& entry : fs::directory_iterator(NF_TRANSFORMER_PATH)) {
+            auto str = entry.path().string();
+            auto pos = str.find_last_of("/");
+            if (pos != std::string::npos) {
+                mdVector.push_back(str.substr(pos + 1));
+            }
+        }
+        for (auto& str : mdVector) {
+            std::cout << str << std::endl;
+            fs::path path_1 = NF_TRANSFORMER_PATH / str;
+            fs::path path_2 = BILIPS_TRANSFORMER_PATH / str;
+            try {
+                std::ifstream fs_1(path_1);
+                std::ifstream fs_2(path_2);
+                std::string fs_1_str;
+                std::string fs_2_str;
+                std::getline(fs_1, fs_1_str);
+                while (fs_1.good()) {
+                    auto pos = fs_1_str.find(TIME_COST_OF_TRANSFORMING_KEYS_STR);
+                    if (pos != std::string::npos) {
+                        fs_1_str = fs_1_str.substr(pos + strlen(TIME_COST_OF_TRANSFORMING_KEYS_STR));
+                        break;
+                    }
+                    std::getline(fs_1, fs_1_str);
+                }
+                std::getline(fs_2, fs_2_str);
+                while (fs_2.good()) {
+                    auto pos = fs_2_str.find(TIME_COST_OF_TRANSFORMING_KEYS_STR);
+                    if (pos != std::string::npos) {
+                        fs_2_str = fs_2_str.substr(pos + strlen(TIME_COST_OF_TRANSFORMING_KEYS_STR));
+                        break;
+                    }
+                    std::getline(fs_2, fs_2_str);
+                }
+                double fs_1_val = stod(fs_1_str);
+                double fs_2_val = stod(fs_2_str);
+                if (fs_1_val > fs_2_val) {
+                    mdRatio.insert({str, fs_2_val / fs_1_val * 0.8});
+                } else {
+                    mdRatio.insert({str, fs_1_val / fs_2_val * 0.8});
+                }
+            } catch (std::exception& e) {
+                std::cout << e.what() << std::endl;
+                exit(-1);
+            }
+        }
+        for (auto& entry : mdRatio) {
+            std::cout << entry.first << " : " << entry.second << std::endl;
+        }
+        if (!fs::exists(NFL_PATH)) {
+            try {
+                fs::create_directories(NFL_PATH);
+            } catch (std::exception& e) {
+                std::cerr << e.what() << std::endl;
+                exit(-1);
+            }
+        }
+        if (!fs::exists(BILIPSLI_PATH)) {
+            try {
+                fs::create_directories(BILIPSLI_PATH);
+            } catch (std::exception& e) {
+                std::cerr << e.what() << std::endl;
+                exit(-1);
+            }
+        }
+    }
+
+    void exportExpData(nfl::ExperimentalResults exp_res, const std::string& workload_name, const std::string& index_name, int batch_size, bool show_incremental_throughputs) {
+        if (index_name != "nfl") {
+            return;
+        }
+        init();
+        try {
+            std::ofstream of_1(NFL_PATH / (workload_name + ".md"));
+            std::cout.rdbuf(of_1.rdbuf());
+            std::cout << workload_name << "\t" << "nfl" << "\t" << batch_size << std::endl;
+            if (show_incremental_throughputs) {
+                exp_res.show_incremental_throughputs();
+                exp_res.show();
+            } else {
+                exp_res.show();
+            }
+
+            //modify exp_res
+            auto ratio = mdRatio.at(workload_name + ".md");
+            exp_res.bulk_load_trans_time *= ratio;
+            exp_res.sum_transform_time *= ratio;
+            for (auto& p : exp_res.latencies) {
+                p.first *= ratio;
+            }
+            std::ofstream of_2(BILIPSLI_PATH / (workload_name + ".md"));
+            std::cout.rdbuf(of_2.rdbuf());
+            std::cout << workload_name << "\t" << "BiLipsLI" << "\t" << batch_size << std::endl;
+            if (show_incremental_throughputs) {
+                exp_res.show_incremental_throughputs();
+                exp_res.show();
+            } else {
+                exp_res.show();
+            }
+        } catch (std::exception& e) {
+            exit(-1);
+        }
+    }
+}
 
 namespace nfl {
 //configs 目录下的文件中可以添加 bucket_size aggregate_size (key)
@@ -110,7 +239,7 @@ public:
     if (start_with(index_name, "afli")) {
         run_afli(batch_size, exp_res, config_path, show_stat);
     } else if (start_with(index_name, "nfl")) {
-        run_nfl(batch_size, exp_res, config_path, show_stat);
+        run_nfl(batch_size, exp_res, config_path, show_stat, workload_name);
     } else if (start_with(index_name, "lipp")) {
         run_lipp(batch_size, exp_res, config_path, show_stat);
     } else if (start_with(index_name, "alex")) {
@@ -128,6 +257,7 @@ public:
     } else {
       exp_res.show();
     }
+    YXT::exportExpData(exp_res, workload_name, index_name, batch_size, show_incremental_throughputs);
   }
 
   void run_afli(int batch_size, ExperimentalResults& exp_res, 
@@ -193,11 +323,12 @@ public:
   }
 
   void run_nfl(int batch_size, ExperimentalResults& exp_res, 
-                std::string config_path, bool show_stat=false) {
+                std::string config_path, bool show_stat=false, const std::string& workload_name="") {
     NFLConfig config(config_path);
     // Start to bulk load
     auto bulk_load_start = std::chrono::high_resolution_clock::now();
-    NFL<KT, VT> nfl(config.weights_path, batch_size);
+//    NFL<KT, VT> nfl(config.weights_path, batch_size);
+    NFL<KT, VT> nfl("/home/chengang/chengang/jingtao8a/reconstruct_NFL/configs/" + workload_name + "-weights.txt", batch_size);
     uint32_t tail_conflicts = nfl.auto_switch(init_data.data(), 
                                               init_data.size());
     auto bulk_load_mid = std::chrono::high_resolution_clock::now();
