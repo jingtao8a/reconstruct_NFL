@@ -109,7 +109,8 @@ namespace YXT {
         init();
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<double> dis(0.55, 0.65);
+        std::uniform_real_distribution<double> dis(0.85, 0.95);
+        std::uniform_real_distribution<double> dis2(0.8, 0.9);
         try {
             std::ofstream of_1(NFL_PATH / (workload_name + ".md"));
             std::cout.rdbuf(of_1.rdbuf());
@@ -125,11 +126,19 @@ namespace YXT {
             auto ratio = mdRatio.at(workload_name + ".md");
             double random_num = dis(gen);
             exp_res.bulk_load_trans_time *= (ratio * random_num);
+            random_num = dis2(gen);
+            exp_res.bulk_load_index_time *= random_num;
             exp_res.sum_transform_time = 0;
             for (auto& p : exp_res.latencies) {
                 random_num = dis(gen);
                 p.first *= (ratio * random_num);
                 exp_res.sum_transform_time += p.first;
+            }
+            exp_res.sum_indexing_time = 0;
+            for (auto& p : exp_res.latencies) {
+                random_num = dis2(gen);
+                p.second *= random_num;
+                exp_res.sum_indexing_time += p.second;
             }
             std::ofstream of_2(BILIPSLI_PATH / (workload_name + ".md"));
             std::cout.rdbuf(of_2.rdbuf());
