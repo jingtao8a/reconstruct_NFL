@@ -8,6 +8,7 @@
 #include "nfl/nfl.h"
 #include "lipp/src/core/lipp.h"
 #include "ALEX/src/core/alex.h"
+#include "stx/btree.h"
 #include <fstream>
 #include <iostream>
 #include <filesystem>
@@ -261,6 +262,8 @@ public:
         run_lipp(batch_size, exp_res, config_path, show_stat);
     } else if (start_with(index_name, "alex")) {
         run_alex(batch_size, exp_res, config_path, show_stat);
+    } else if (start_with(index_name, "b_tree")) {
+        run_b_tree(batch_size, exp_res, config_path, show_stat);
     } else {
         std::cout << "Unsupported model name [" << index_name << "]" << std::endl;
         exit(-1);
@@ -527,6 +530,66 @@ public:
             alex.print_stats();
         }
     }
+    void run_b_tree(int batch_size, ExperimentalResults& exp_res,
+                         std::string config_path, bool show_stat=false) {
+        // Start to bulk load
+        auto bulk_load_start = std::chrono::high_resolution_clock::now();
+        stx::btree<KT, VT> b_tree;
+        for (int i = 0; i < init_data.size(); ++i) {
+            b_tree.insert2(init_data[i].first, init_data[i].second);
+        }
+        auto bulk_load_end = std::chrono::high_resolution_clock::now();
+        exp_res.bulk_load_index_time =
+                std::chrono::duration_cast<std::chrono::nanoseconds>(bulk_load_end
+                                                                     - bulk_load_start).count();
+        std::vector<KVT> batch_data;
+        batch_data.reserve(batch_size);
+        // Perform requests in batch
+        int num_batches = std::ceil(requests.size() * 1. / batch_size);
+        exp_res.latencies.reserve(num_batches * 3);
+        exp_res.need_compute.reserve(num_batches * 3);
+        for (int batch_idx = 0; batch_idx < num_batches; ++ batch_idx) {
+            batch_data.clear();
+            int l = batch_idx * batch_size;
+            int r = std::min((batch_idx + 1) * batch_size,
+                             static_cast<int>(requests.size()));
+            for (int i = l; i < r; ++ i) {
+                batch_data.push_back(requests[i].kv);
+            }
+
+            VT val_sum = 0;
+            // Perform requests
+            auto start = std::chrono::high_resolution_clock::now();
+            for (int i = l; i < r; ++ i) {
+                int data_idx = i - l;
+                if (requests[i].op == kQuery) {
+                    auto res = b_tree.find(batch_data[data_idx].first);
+                    if (res != b_tree.end()) {
+                        val_sum += res.data();
+                    }
+                } else if (requests[i].op == kUpdate) {
+                    b_tree.erase(batch_data[data_idx].first);
+                    b_tree.insert2(batch_data[data_idx].first, batch_data[data_idx].second);
+                } else if (requests[i].op == kInsert) {
+                    b_tree.insert2(batch_data[data_idx].first, batch_data[data_idx].second);
+                } else if (requests[i].op == kDelete) {
+                    b_tree.erase(batch_data[data_idx].first);
+                }
+            }
+            auto end = std::chrono::high_resolution_clock::now();
+            double time = std::chrono::duration_cast<std::chrono::nanoseconds>(end
+                                                                               - start).count();
+            exp_res.sum_indexing_time += time;
+            exp_res.num_requests += batch_data.size();
+            exp_res.latencies.push_back({0, time});
+            exp_res.step();
+        }
+        exp_res.model_size = 0;
+        exp_res.index_size = b_tree.size() * sizeof(KVT);
+        if (show_stat) {
+
+        }
+  }
 };
 
 }
