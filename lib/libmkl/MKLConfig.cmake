@@ -84,7 +84,7 @@ unset(MSVC)
 
 # Find MKL ROOT
 find_path(MKL_ROOT_DIR NAMES include/mkl_cblas.h PATHS $ENV{MKLROOT})
-
+message("MKLROOT environment variable: $ENV{MKLROOT}")
 # Convert symlinks to real paths
 
 get_filename_component(MKL_ROOT_DIR ${MKL_ROOT_DIR} REALPATH)
@@ -221,7 +221,8 @@ else()
     set(MKL_LIBRARY_DIR)
 
     if (WIN32)
-        set(MKL_LIBRARY_DIR "${MKL_ROOT_DIR}/lib/${MKL_LIB_DIR}/" "${MKL_ROOT_DIR}/../compiler/lib/${MKL_LIB_DIR}")
+        set(MKL_LIBRARY_DIR "${MKL_ROOT_DIR}/lib/${MKL_LIB_DIR}/")
+#"${MKL_ROOT_DIR}/../compiler/lib/${MKL_LIB_DIR}")
 
         # remove unwanted break
         string(REGEX REPLACE "\n" "" MKL_LIBS ${MKL_LIBS})
@@ -262,7 +263,8 @@ else()
                 endif()
                 set(INTEL_LIB_DIR ${INTEL_LIB_DIR1})
             endif()
-            set(MKL_LIBRARY_DIR ${INTEL_LIB_DIR} "${MKL_ROOT_DIR}/../compiler/lib/${MKL_LIB_DIR}")
+            set(MKL_LIBRARY_DIR ${INTEL_LIB_DIR})
+#"${MKL_ROOT_DIR}/../compiler/lib/${MKL_LIB_DIR}")
 
             # get the list of libs
             separate_arguments(MKL_LIBS)
