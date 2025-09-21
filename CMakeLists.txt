@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 project(reconstruct_NFL VERSION 1.0 LANGUAGES  C CXX)
 
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Wall")
+set(CMAKE_C_FLAGS_DEBUG "-g -O0 -Wall")
+
 # specify c/c++ standard
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)
