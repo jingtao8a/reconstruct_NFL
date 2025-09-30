@@ -85,6 +85,7 @@ unset(MSVC)
 # Find MKL ROOT
 find_path(MKL_ROOT_DIR NAMES include/mkl_cblas.h PATHS $ENV{MKLROOT})
 message("MKLROOT environment variable: $ENV{MKLROOT}")
+message("MKL_ROOT_DIR variable: ${MKL_ROOT_DIR}")
 # Convert symlinks to real paths
 
 get_filename_component(MKL_ROOT_DIR ${MKL_ROOT_DIR} REALPATH)
