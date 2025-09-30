@@ -12,7 +12,7 @@
 
 namespace fs = std::filesystem;
 namespace YXT {
-    static const fs::path EXP_DATA_PATH("/home/chengang/chengang/jingtao8a/reconstruct_NFL/exp_data");
+    static const fs::path EXP_DATA_PATH("/home/chengang/jingtao8a/reconstruct_NFL/exp_data");
     static const fs::path NF_TRANSFORMER("NF-transformer");
     static const fs::path BILIPSLI("BiLipsLI");
     static const fs::path BILIPS_TRANSFORMER("BiLips-transformer");
@@ -136,6 +136,6 @@ namespace YXT {
 }
 
 int main() {
-    YXT::exportExpData(nfl::ExperimentalResults(10000), "test", "test", 10000, true);
+    YXT::exportExpData(nfl::ExperimentalResults(10000), "test", "nfl", 10000, true);
     return 0;
 }
