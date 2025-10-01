@@ -88,7 +88,7 @@ void format(std::string source_path, int num_keys = 0) {
   int num_unique = double_keys.size();
   std::cout << "[" << num_unique << "] unique keys in " << source_path << std::endl;
   std::ofstream out(output_path, std::ios::binary | std::ios::out);
-//  out.write((char*)&num_unique, sizeof(int));
+  out.write((char*)&num_unique, sizeof(int));
   out.write((char*)double_keys.data(), num_keys * sizeof(P));
   out.close();
 }

@@ -55,8 +55,8 @@ void load_source_data(std::string path, std::vector<std::pair<KT, VT>>& kvs, int
     std::cout << "File [" << path << "] does not exist" << std::endl;
     exit(-1);
   }
-//  int num_keys = 0;
-//  in.read((char*)&num_keys, sizeof(int));
+  num_keys = 0;
+  in.read((char*)&num_keys, sizeof(int));
   kvs.reserve(num_keys);
   for (int i = 0; i < num_keys; ++ i) {
     KT key;
