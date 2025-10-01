@@ -285,7 +285,7 @@ if __name__ == '__main__':
   else:
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 
                   factor=args.decay, patience=args.patience, min_lr=5e-4, 
-                  verbose=True, threshold_mode='abs')
+                  threshold_mode='abs')
 
     best_loss = 1e20
     for i, train_keys in enumerate(train_keys_list):
