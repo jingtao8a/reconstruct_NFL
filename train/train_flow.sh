@@ -23,18 +23,18 @@ num_flows=1
 num_layers=2
 input_dim=2
 hidden_dim=1
-train_ratio=1
+train_ratio=0.1
 num_train=3
 learning_rate=0.1
 steps=15
 batch_dim=4096
 loss_func='normal'
-output_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/checkpoint
+output_dir=/home/cg/chengang/jingtao8a/reconstruct_NFL/train/checkpoint
 
-data_name=longlat_200M_double_80R_zipf_10000
-data_dir=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/data
+data_name=ycsb_200M_double_0R_zipf_10000
+data_dir=/home/cg/chengang/jingtao8a/reconstruct_NFL/train/data
 
-python_file_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/train/numerical_flow.py
+python_file_path=/home/cg/chengang/jingtao8a/reconstruct_NFL/train/numerical_flow.py
 #conda activate jingtao8a_env
 python3  ${python_file_path} --data_name=${data_name} --data_dir=${data_dir}\
             --seed=${seed} --encoder_type=${en_type} \
