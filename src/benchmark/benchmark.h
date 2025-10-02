@@ -282,7 +282,7 @@ public:
 
   void run_afli(int batch_size, ExperimentalResults& exp_res, 
                 std::string config_path, bool show_stat=false) {
-    AFLIConfig config(config_path);
+//    AFLIConfig config(config_path);
     // Start to bulk load
     auto bulk_load_start = std::chrono::high_resolution_clock::now();
     AFLI<KT, VT> afli;
@@ -344,11 +344,11 @@ public:
 
   void run_nfl(int batch_size, ExperimentalResults& exp_res, 
                 std::string config_path, bool show_stat=false, const std::string& workload_name="") {
-    NFLConfig config(config_path);
+//    NFLConfig config(config_path);
     // Start to bulk load
     auto bulk_load_start = std::chrono::high_resolution_clock::now();
 //    NFL<KT, VT> nfl(config.weights_path, batch_size);
-    NFL<KT, VT> nfl("/home/chengang/chengang/jingtao8a/reconstruct_NFL/configs/" + workload_name + "-weights.txt", batch_size);
+    NFL<KT, VT> nfl(config_path, batch_size);
     uint32_t tail_conflicts = nfl.auto_switch(init_data.data(), 
                                               init_data.size());
     auto bulk_load_mid = std::chrono::high_resolution_clock::now();
