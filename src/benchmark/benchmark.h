@@ -277,7 +277,7 @@ public:
     } else {
       exp_res.show();
     }
-    YXT::exportExpData(exp_res, workload_name, index_name, batch_size, show_incremental_throughputs);
+//    YXT::exportExpData(exp_res, workload_name, index_name, batch_size, show_incremental_throughputs);
   }
 
   void run_afli(int batch_size, ExperimentalResults& exp_res, 
