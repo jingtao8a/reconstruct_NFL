@@ -48,7 +48,7 @@ void generate_synthetic_keys(DType dist, int num_keys, std::vector<KT>& keys,
 }
 
 template<typename KT, typename VT>
-void load_source_data(std::string path, std::vector<std::pair<KT, VT>>& kvs, int num_keys) {
+void load_source_data(std::string path, std::vector<std::pair<KT, VT>>& kvs, int& num_keys) {
   std::mt19937_64 gen(kSEED);
   std::ifstream in(path, std::ios::binary | std::ios::in);
   if (!in.is_open()) {

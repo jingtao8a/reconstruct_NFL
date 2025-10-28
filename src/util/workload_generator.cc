@@ -34,6 +34,9 @@ std::string get_name(std::string data_path) {
 template<typename KT, typename VT>
 void generate_requests(std::string output_path, std::string data_path, std::string dist_name, int batch_size, double init_frac, double read_frac, double kks_frac) {
   // Load data
+  std::cout << "First type bytes [" << str<size_t>(sizeof(KT)) << "], "
+              << "second type bytes [" << str<size_t>(sizeof(VT)) << "]"
+              << std::endl;
   std::string data_name = get_name(data_path);
   int num_keys = get_num_keys(data_name);
   std::vector<std::pair<KT, VT>> kvs;
@@ -135,7 +138,7 @@ int main(int argc, char* argv[]) {
     double kks_frac = ston<char*, double>(argv[6]);
 
     std::string data_name = get_name(data_path);
-    std::string workload_dir = "/home/cg/chengang/jingtao8a/workload";
+    std::string workload_dir = "/home/chengang/chengang/jingtao8a/reconstruct_NFL/workload";
     std::string output_path = path_join(workload_dir, data_name + "_" + str<int>(read_frac * 100) + "R_" + dist_name + "_" + std::to_string(batch_size) + ".bin");
     std::string source_path = data_path;
     generate_requests<double, long long>(output_path, source_path, dist_name, batch_size, init_frac, read_frac, kks_frac);

@@ -61,9 +61,11 @@ void format(std::string source_path, int num_keys = 0) {
             << std::endl;
   std::vector<T> origin_keys;
   std::vector<P> double_keys;
+  std::cout << "nums = " << num_keys << std::endl;
   if (num_keys == 0) {
     in.read((char*)&num_keys, sizeof(T));
   }
+  std::cout << "nums = " << num_keys << std::endl;
   std::cout << "[" << num_keys << "] keys found in " << source_path << std::endl;
   origin_keys.resize(num_keys);
   in.read((char*)origin_keys.data(), num_keys * sizeof(T));
