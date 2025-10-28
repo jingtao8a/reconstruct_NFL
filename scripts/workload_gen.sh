@@ -9,7 +9,7 @@ data_path=/home/chengang/chengang/jingtao8a/reconstruct_NFL/data/ycsb_200M_doubl
 distribution_name=zipf
 batch_size=10000
 init_frac=0.5 # default
-read_ratio=100
+read_ratio=0
 kks_write_frac=1 # default
 
 echo "${exec} ${data_path} ${distribution_name} ${batch_size} ${init_frac} ${read_ratio} ${kks_write_frac}"
