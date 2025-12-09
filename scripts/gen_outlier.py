@@ -1,12 +1,11 @@
-
 import numpy as np
 import os
 
 def generate_large_float_dataset(
-        normal_sample_size: int = 199_990_000,  # 正常均匀分布数据量（1.9999亿）
-        anomaly_sample_size: int = 10_000, # 异常值数据量（1万）
-        normal_range: tuple = (0.0, 100.0),     # 正常数据均匀分布范围
-        anomaly_range: tuple = (1e9, 1e12),     # 异常值均匀分布范围（极值）
+        normal_sample_size: int = 199_999_999,  # 正常均匀分布数据量（1.9999亿）
+        anomaly_sample_size: int = 1, # 异常值数据量（1万）
+        normal_range: tuple = (0.0, 1e3),     # 正常数据均匀分布范围
+        anomaly_range: tuple = (1e6, 1e8),     # 异常值均匀分布范围（极值）
         output_file: str = "float_dataset.bin", # 输出文件路径
         file_format: str = "binary",            # 输出格式：binary/text
         batch_size: int = 10_000_000            # 分批次生成的批次大小（缓解内存压力）
@@ -55,8 +54,8 @@ def generate_large_float_dataset(
     # ===================== 3. 合并并打乱数据 =====================
     print("\n合并并打乱2亿个数据...")
     all_data = np.concatenate([normal_data, anomaly_data])
-    # 原地打乱，节省内存
-    np.random.shuffle(all_data)
+    # # 原地打乱，节省内存
+    # np.random.shuffle(all_data)
     print("数据打乱完成")
 
     # ===================== 4. 分块写入本地文件 =====================
