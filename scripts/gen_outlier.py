@@ -2,8 +2,8 @@ import numpy as np
 import os
 
 def generate_large_float_dataset(
-        normal_sample_size: int = 199_999_999,  # 正常均匀分布数据量（1.9999亿）
-        anomaly_sample_size: int = 1, # 异常值数据量（1万）
+        normal_sample_size: int = 199_999_950,  # 正常均匀分布数据量（1.9999亿）
+        anomaly_sample_size: int = 50, # 异常值数据量（1万）
         normal_range: tuple = (0.0, 1e3),     # 正常数据均匀分布范围
         anomaly_range: tuple = (1e6, 1e8),     # 异常值均匀分布范围（极值）
         output_file: str = "float_dataset.bin", # 输出文件路径
